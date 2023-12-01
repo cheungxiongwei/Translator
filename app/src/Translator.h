@@ -15,6 +15,27 @@
 #include <QUrlQuery>
 #include <QUuid>
 
+#include <QFile>
+
+class BasicData
+{
+    Q_GADGET
+    Q_PROPERTY(QString query MEMBER query)
+    Q_PROPERTY(QStringList examType MEMBER examType)
+    Q_PROPERTY(QStringList explains MEMBER explains)
+    Q_PROPERTY(QString phonetic MEMBER phonetic)
+    Q_PROPERTY(QVariantList wfs MEMBER wfs)
+
+public:
+    QString query;         // 查询
+    QStringList examType;  // 考试
+    QStringList explains;  // 解释
+    QString phonetic;      // 音标
+    QVariantList wfs;      // 词性变换
+};
+
+Q_DECLARE_METATYPE(BasicData)
+
 class Translator : public QObject
 {
     Q_OBJECT
@@ -26,8 +47,8 @@ public:
     Translator(QObject *parent = nullptr)
       : QObject(parent)
       , mManager(new QNetworkAccessManager(this)) {
-        mSourceLanguage = {"自动识别", "中文", "英文", "俄文"};
-        mTargetLanguage = {"中文", "英文", "俄文"};
+        mSourceLanguage = QStringList {"自动识别", "中文", "英文", "俄文"};
+        mTargetLanguage = QStringList {"中文", "英文", "俄文"};
 
         // 填充语言映射
         mLanguageMap.insert("自动识别", "auto");
@@ -95,23 +116,15 @@ public slots:
 signals:
     void translationFinished(const QString &result);
 
+    void translationWordFinished(const BasicData &result);
+
     void sourceLanguageChanged();
 
     void targetLanguageChanged();
 
 private slots:
 
-    void onManagerFinished(QNetworkReply *reply) {
-        if(reply->error() != QNetworkReply::NoError) {
-            // Handle error
-            return;
-        }
-
-        QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
-        QJsonObject obj   = doc.object();
-        QString result    = obj["translation"].toArray().first().toString();
-        emit translationFinished(result);
-    }
+    void onManagerFinished(QNetworkReply *reply);
 
 private:
     QNetworkAccessManager *mManager;

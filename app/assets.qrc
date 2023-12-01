@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/001-exchange.svg</file>
+        <file>assets/favicon.ico</file>
+        <file>assets/002-exchange.png</file>
+    </qresource>
+</RCC>

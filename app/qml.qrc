@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>uikit/SvgImage.qml</file>
+        <file>uikit/qmldir</file>
+    </qresource>
+</RCC>
