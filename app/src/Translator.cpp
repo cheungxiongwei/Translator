@@ -8,7 +8,7 @@ void Translator::onManagerFinished(QNetworkReply *reply) {
 
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
 
-    {
+    if constexpr(false) {
         QFile fs("ts.txt");
         fs.open(QFile::ReadWrite | QFile::Truncate | QFile::Text);
         fs.write(doc.toJson(QJsonDocument::Indented));
